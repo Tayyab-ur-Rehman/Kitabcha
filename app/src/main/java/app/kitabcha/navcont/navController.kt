@@ -8,9 +8,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import app.kitabcha.data.entity.MangaEntity
 import app.kitabcha.presentation.LibraryScreen
 import app.kitabcha.presentation.SourceScreen
 import app.kitabcha.presentation.mangaLibraryScreen
+import app.kitabcha.presentation.mangaScreen
 import com.mkrdeveloper.viewmodeljetpack.app.kitabcha.presentation.LoginScreen
 
 @Composable
@@ -22,6 +24,17 @@ fun navCont()
         composable(Routes.LoginScreen)
         {
             LoginScreen(navController)
+        }
+
+
+
+        composable("${Routes.mangaScreen}/{userId}/{Mangaid}" , arguments =
+        listOf( navArgument("userId"){type= NavType.IntType}
+            ,  navArgument("Catid"){type= NavType.IntType}))
+        {
+            val mangaid = it.arguments!!.getInt("Mangaid")
+            val user = it.arguments!!.getInt("userId")
+            mangaScreen(navController = navController, UserId = user,mangaid)
         }
 
         composable(route=  "${Routes.libraryScreen}/{id}" , arguments =

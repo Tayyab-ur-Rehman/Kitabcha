@@ -13,7 +13,7 @@ interface ChapterRepository {
 
     suspend fun delete(chp: ChapterEntity)
 
-    suspend fun getMangaChapters(mngaID: Int): Flow<List<ChapterEntity>>
+    suspend fun getMangaChapters(mngaID: Int): List<ChapterEntity>
 
 }
 
@@ -32,7 +32,8 @@ class ChapterRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMangaChapters(mngaID: Int): Flow<List<ChapterEntity>> {
+
+    override suspend fun getMangaChapters(mngaID: Int): List<ChapterEntity> {
         return withContext(IO) {
             dao.getMangaChapters(mngaID)
         }

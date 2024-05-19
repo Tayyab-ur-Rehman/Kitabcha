@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey
         entity = MangaEntity::class,
         parentColumns = ["mangaID"],
         childColumns = ["owner_manga_id"],
+
         onDelete = ForeignKey.CASCADE
     )])
 data class ChapterEntity (
