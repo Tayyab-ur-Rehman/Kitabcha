@@ -21,3 +21,7 @@ interface ChapterDao {
     fun getMangaChapters(mngaID: Int): List<ChapterEntity>
 
 }
+
+
+
+
