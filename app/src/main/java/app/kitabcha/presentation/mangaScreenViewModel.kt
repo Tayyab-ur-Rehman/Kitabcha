@@ -1,7 +1,5 @@
 package app.kitabcha.presentation
 
-
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.kitabcha.data.entity.CategoryEntity
@@ -19,31 +17,27 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MangaViewModel @Inject constructor(
-    private val repository: CategoryRepository,
-    private val repository2: LibraryRepository,
-    private val repository3: CategoryMangaRepository,
-    private val repository4: ChapterRepository,
+class MangaViewModel
+    @Inject
+    constructor(
+        private val repository: CategoryRepository,
+        private val repository2: LibraryRepository,
+        private val repository3: CategoryMangaRepository,
+        private val repository4: ChapterRepository,
+    ) : ViewModel() {
+        fun delCategory(id: CategoryEntity) {
+            viewModelScope.launch(IO) {
+                repository.delete(id)
+            }
+        }
 
-) : ViewModel() {
+        private val MangaChapters = MutableStateFlow(emptyList<ChapterEntity>())
+        val AllChapters = MangaChapters.asStateFlow()
 
-
-    fun delCategory(id: CategoryEntity) {
-        viewModelScope.launch(IO) {
-            repository.delete(id)
+        suspend fun getchaptersUsingmangaId(id: Int) {
+            withContext(IO) {
+                val Mangachps = repository4.getMangaChapters(id)
+                MangaChapters.tryEmit(Mangachps)
+            }
         }
     }
-
-
-
-
-    private val MangaChapters = MutableStateFlow(emptyList<ChapterEntity>())
-    val AllChapters = MangaChapters.asStateFlow()
-    suspend fun getchaptersUsingmangaId(id: Int) {
-        withContext(IO) {
-            val Mangachps =  repository4.getMangaChapters(id)
-            MangaChapters.tryEmit(Mangachps)
-        }
-    }
-}
-
