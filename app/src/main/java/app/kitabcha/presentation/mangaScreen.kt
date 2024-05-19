@@ -1,4 +1,5 @@
 package app.kitabcha.presentation
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,52 +28,49 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import app.kitabcha.navcont.Routes
+import app.kitabcha.data.entity.MangaEntity
 import kotlinx.coroutines.runBlocking
 
-@Composable fun mangaLibraryScreen(navController: NavController,UserId: Int,cateId:Int) {
-    val viewModel = hiltViewModel<libraryMangaViewModel>()
+@Composable fun mangaScreen(navController: NavController,UserId: Int,mangaId:Int) {
+    val viewModel = hiltViewModel<MangaViewModel>()
 
-    Content1(viewModel , navController, UserId, cateId)
+    Content2(viewModel , navController, UserId, mangaId)
 }
 
 @Composable
-fun Content1(mangalibraryViewModel: libraryMangaViewModel, navController: NavController, UserId: Int,cateId:Int ) {
+fun Content2(manga_ViewModel: MangaViewModel, navController: NavController, UserId: Int,mangaId:Int ) {
 
-    val AllManga by mangalibraryViewModel.AllManga.collectAsStateWithLifecycle()
+    val AllChapters by manga_ViewModel.AllChapters.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
         runBlocking {
-            mangalibraryViewModel.getCategoryIdUsingUserId(UserId)
+            manga_ViewModel.getchaptersUsingmangaId(mangaId)
         }
     }
 
 
-    runBlocking {
-        mangalibraryViewModel.getMangaIdUsingCategoryId(cateId)
-    }
 
 
-    if (AllManga.isNotEmpty()) {
+    if (AllChapters.isNotEmpty()) {
         LazyColumn(modifier = Modifier
-            .padding(top = 30.dp)
-            .padding(bottom = 50.dp)
+            .padding(top = 100.dp)
+            .padding(bottom = 30.dp)
 
         ) {
 
             itemsIndexed(
-                AllManga
+                AllChapters
 
             )
-            { index, categoryMAngas ->
+            { index, mangaChap ->
 
-                Text(text = (index + 1).toString() + " - " + categoryMAngas.mangaTitle + "       " + categoryMAngas.mangaAuthor,
+                Text(text =  " -    chapter no." + mangaChap.chapterNum + "  owner manga id = " + mangaChap.ownerMangaID,
                     style = TextStyle(fontWeight = FontWeight.Bold) ,
                     fontSize = (20.sp),
                     modifier = Modifier
                         .padding(20.dp)
                         .clickable {
-                            navController.navigate("${Routes.mangaScreen}/${UserId}/${categoryMAngas.mangaID}")
+                        // call to another screen opening manga :  reader
                         }
 
                 )
@@ -85,14 +83,14 @@ fun Content1(mangalibraryViewModel: libraryMangaViewModel, navController: NavCon
     else
     {
         Text(text = " Empty " , modifier =Modifier.padding(20.dp) )
-        
+
     }
     Row (
-            horizontalArrangement = Arrangement.SpaceAround,
-    verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.Bottom,
 
-    modifier = Modifier
-        .fillMaxSize().padding(bottom =15.dp)
+        modifier = Modifier
+            .fillMaxSize().padding(bottom =15.dp)
     ) {
         Button(
             onClick = {  },
@@ -103,10 +101,30 @@ fun Content1(mangalibraryViewModel: libraryMangaViewModel, navController: NavCon
 
         ) {
             Text(
-                text = "Delete Category",
-                //style = MaterialTheme.typography.button, // Adjust text style as needed
+                text = "Button if needed",
             )
         }
+    }
+    Row (
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.Bottom,
+
+        modifier = Modifier
+            .fillMaxSize().padding(bottom =15.dp)
+    ) {
+
+            Text(
+
+               // text = "${manga.mangaTitle}        Author = ${manga.mangaAuthor}", after getting manga entity by manga id
+                text= "                            information   ",
+                style = TextStyle(fontWeight = FontWeight.Bold) ,
+                fontSize = (30.sp),
+                modifier = Modifier
+                    .padding(15.dp)
+                    ,
+                color = Color.Yellow
+            )
+
     }
 
 }
