@@ -118,7 +118,7 @@ fun Content2(manga_ViewModel: MangaViewModel, navController: NavController, User
                // text = "${manga.mangaTitle}        Author = ${manga.mangaAuthor}", after getting manga entity by manga id
                 text= "                            information   ",
                 style = TextStyle(fontWeight = FontWeight.Bold) ,
-                fontSize = (30.sp),
+                fontSize = (40.sp),
                 modifier = Modifier
                     .padding(15.dp)
                     ,
